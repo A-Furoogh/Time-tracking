@@ -1,25 +1,10 @@
-﻿using Microsoft.SqlServer.Server;
-using System;
-using System.Collections.Generic;
+﻿using System;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
-using System.Data;
 using System.Diagnostics;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Controls.Primitives;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
 using System.Windows.Threading;
-using Time_Tracking;
 
 namespace Time_Tracking
 {
@@ -64,7 +49,7 @@ namespace Time_Tracking
             InitializeComponent();
             // Initialisierung von Objekt-Liste
             Projekte = new ObservableCollection<Projekt>();
-            
+
             AuswahlProjekt = new Projekt();
             AlteProjekt = new Projekt();
             // Setzen des DataContext auf dieses Fenster
@@ -74,7 +59,7 @@ namespace Time_Tracking
             timer.Tick += new EventHandler(timer_Tick);
             timer.Interval = new TimeSpan(0, 0, 0, 0);
             // Füllen der Liste mit Beispiel-Projekte zum Start 
-            Projekte.Add(new Projekt { ProjektName = "C# Programmieren", ProjektBeschreibung = "Weiterentwicklung von Projekte", AnfangsDatum = new DateTime(2023, 09, 05, 0, 0, 0), EndDatum = DateTime.Today, GebrauchteZeit =TimeSpan.Zero }) ;
+            Projekte.Add(new Projekt { ProjektName = "C# Programmieren", ProjektBeschreibung = "Weiterentwicklung von Projekte", AnfangsDatum = new DateTime(2023, 09, 05, 0, 0, 0), EndDatum = DateTime.Today, GebrauchteZeit = TimeSpan.Zero });
             Projekte.Add(new Projekt { ProjektName = "Netzwerke", ProjektBeschreibung = "Zusammenbauen von verschiedenen Vlans", AnfangsDatum = new DateTime(2022, 11, 03, 0, 0, 0), EndDatum = DateTime.Today, GebrauchteZeit = TimeSpan.Zero });
             Projekte.Add(new Projekt { ProjektName = "Meeting", ProjektBeschreibung = "Team-Besprechung mit Kollegen", AnfangsDatum = new DateTime(2022, 11, 05, 0, 0, 0), EndDatum = new DateTime(2022, 11, 05, 0, 0, 0), GebrauchteZeit = TimeSpan.Zero });
             Projekte.Add(new Projekt { ProjektName = "Hausbesuch", ProjektBeschreibung = "Vorbereiten Materialien", AnfangsDatum = new DateTime(2022, 10, 03, 0, 0, 0), EndDatum = new DateTime(2022, 10, 03, 0, 0, 0), GebrauchteZeit = TimeSpan.Zero });
@@ -129,16 +114,23 @@ namespace Time_Tracking
             if (NeuesProjektFensterObjkt.Projekt_Name.Text != string.Empty)
             {
                 // Aufnahme der Daten aus 2.Fenster.
-                Projekte.Add(new Projekt() { ProjektName = NeuesProjektFensterObjkt.Projekt_Name.Text
-                                                           , ProjektBeschreibung = NeuesProjektFensterObjkt.Projekt_Beschreibung.Text
-                                                           , AnfangsDatum = Convert.ToDateTime(NeuesProjektFensterObjkt.Anfangs_Datum.Text)
-                                                           , EndDatum = Convert.ToDateTime(NeuesProjektFensterObjkt.End_Datum.Text), GebrauchteZeit = TimeSpan.Zero });
+                Projekte.Add(new Projekt()
+                {
+                    ProjektName = NeuesProjektFensterObjkt.Projekt_Name.Text
+                                                           ,
+                    ProjektBeschreibung = NeuesProjektFensterObjkt.Projekt_Beschreibung.Text
+                                                           ,
+                    AnfangsDatum = Convert.ToDateTime(NeuesProjektFensterObjkt.Anfangs_Datum.Text)
+                                                           ,
+                    EndDatum = Convert.ToDateTime(NeuesProjektFensterObjkt.End_Datum.Text),
+                    GebrauchteZeit = TimeSpan.Zero
+                });
                 NeuesProjektFensterObjkt.Hide();
             }
             // Beim leeren Eingabe.
             else
             {
-                MessageBox.Show("bitte Name eingeben","Ok",MessageBoxButton.OK);
+                MessageBox.Show("bitte Name eingeben", "Ok", MessageBoxButton.OK);
             }
         }
         // Eventhandler beim ändern des Auswahl-Projekts im ComboBox.
@@ -177,11 +169,11 @@ namespace Time_Tracking
 
             if (index > -1 && index < Projekte.Count)
             {
-                if(index == auswahlProjektIndex)
+                if (index == auswahlProjektIndex)
                 {
                     MessageBox.Show("Das ausgewählte Projekt kann nicht gelöscht werden");
                 }
-                else 
+                else
                 {
                     Projekte.RemoveAt(index);
                 }
