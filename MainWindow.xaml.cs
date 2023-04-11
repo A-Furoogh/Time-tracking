@@ -180,7 +180,7 @@ namespace Time_Tracking
             }
             else
             {
-                MessageBox.Show("Nicht gelöscht !");
+                MessageBox.Show("Projekt nicht ausgewählt! oder ist nicht löschbar!");
             }
         }
     }
