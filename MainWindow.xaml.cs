@@ -212,8 +212,11 @@ namespace Time_Tracking
                 // Create a new file with default data
                 using (StreamWriter writer = new StreamWriter("data.txt"))
                 {
-                    writer.WriteLine("BeispielProjekt-Name1,BeispielProjekt-Beschreibung1,2023-04-13,2023-05-13,00:00:00");
-                    writer.WriteLine("BeispielProjekt-Name2,BeispielProjekt-Beschreibung2,2023-04-13,2023-05-13,00:00:00");
+                    writer.WriteLine("C# Programmieren,Weiterentwicklung von Projekte,2023-04-13,2023-05-13,00:20:00");
+                    writer.WriteLine("Meeting,Team-Besprechung mit Kollegen,2023-05-11,2023-05-12,00:00:00");
+                    writer.WriteLine("Hausbesuch,Vorbereiten Materialien,2023-09-10,2023-10-11,00:00:00");
+                    writer.WriteLine("Projektvorstellung,Vorbereiten des Projektes,2023-04-13,2023-05-13,00:00:00");
+                    writer.WriteLine("Website-Raparatur,Beheben von Programm-fehlern,2023-03-03,2023-03-12,00:00:00");
                 }
             }
             // Eine neue Instanz von StreamReader zum Lesen aus der Datei erstellen.
