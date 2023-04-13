@@ -8,8 +8,9 @@ using System.Windows.Threading;
 
 namespace Time_Tracking
 {
-    /// Hochschule Hamm-Lippstadt
-    /// Entwickler: Ahmad Furoogh
+    /// Hochschule Hamm-Lippstadt / <summary>
+    /// Hochschule Hamm-Lippstadt //
+    /// </summary>Furoogh
     /// 3.Semester  12.01.2023
     public partial class MainWindow : Window, INotifyPropertyChanged
     {
@@ -180,7 +181,7 @@ namespace Time_Tracking
             }
             else
             {
-                MessageBox.Show("Projekt nicht ausgewählt! oder ist nicht löschbar!");
+                MessageBox.Show("Nicht gelöscht !");
             }
         }
     }
