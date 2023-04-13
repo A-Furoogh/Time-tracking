@@ -2,6 +2,7 @@
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Diagnostics;
+using System.IO;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Threading;
@@ -59,13 +60,14 @@ namespace Time_Tracking
             // Initialisieren des Timers & zum aufrufen timer-Tick Event-Handler
             timer.Tick += new EventHandler(timer_Tick);
             timer.Interval = new TimeSpan(0, 0, 0, 0);
+            LoadDataFromFile();
             // Füllen der Liste mit Beispiel-Projekte zum Start 
-            Projekte.Add(new Projekt { ProjektName = "C# Programmieren", ProjektBeschreibung = "Weiterentwicklung von Projekte", AnfangsDatum = new DateTime(2023, 09, 05, 0, 0, 0), EndDatum = DateTime.Today, GebrauchteZeit = TimeSpan.Zero });
+            /*Projekte.Add(new Projekt { ProjektName = "C# Programmieren", ProjektBeschreibung = "Weiterentwicklung von Projekte", AnfangsDatum = new DateTime(2023, 09, 05, 0, 0, 0), EndDatum = DateTime.Today, GebrauchteZeit = TimeSpan.Zero });
             Projekte.Add(new Projekt { ProjektName = "Netzwerke", ProjektBeschreibung = "Zusammenbauen von verschiedenen Vlans", AnfangsDatum = new DateTime(2022, 11, 03, 0, 0, 0), EndDatum = DateTime.Today, GebrauchteZeit = TimeSpan.Zero });
             Projekte.Add(new Projekt { ProjektName = "Meeting", ProjektBeschreibung = "Team-Besprechung mit Kollegen", AnfangsDatum = new DateTime(2022, 11, 05, 0, 0, 0), EndDatum = new DateTime(2022, 11, 05, 0, 0, 0), GebrauchteZeit = TimeSpan.Zero });
             Projekte.Add(new Projekt { ProjektName = "Hausbesuch", ProjektBeschreibung = "Vorbereiten Materialien", AnfangsDatum = new DateTime(2022, 10, 03, 0, 0, 0), EndDatum = new DateTime(2022, 10, 03, 0, 0, 0), GebrauchteZeit = TimeSpan.Zero });
             Projekte.Add(new Projekt { ProjektName = "Projektvorstellung", ProjektBeschreibung = "Vorbereiten des Projektes", AnfangsDatum = new DateTime(2022, 11, 05, 0, 0, 0), EndDatum = new DateTime(2022, 11, 05, 0, 0, 0), GebrauchteZeit = TimeSpan.Zero });
-            Projekte.Add(new Projekt { ProjektName = "Website Raparatur", ProjektBeschreibung = "Beheben von Programm-fehler", AnfangsDatum = new DateTime(2020, 06, 01, 0, 0, 0), EndDatum = new DateTime(2020, 08, 04, 0, 0, 0), GebrauchteZeit = TimeSpan.Zero });
+            Projekte.Add(new Projekt { ProjektName = "Website Raparatur", ProjektBeschreibung = "Beheben von Programm-fehler", AnfangsDatum = new DateTime(2020, 06, 01, 0, 0, 0), EndDatum = new DateTime(2020, 08, 04, 0, 0, 0), GebrauchteZeit = TimeSpan.Zero });*/
             // Zuweisung der Projekt-Liste auf Resource-Eigenschaft der DataGrid
             DatenTabelle.ItemsSource = Projekte;
         }
@@ -127,6 +129,7 @@ namespace Time_Tracking
                     GebrauchteZeit = TimeSpan.Zero
                 });
                 NeuesProjektFensterObjkt.Hide();
+                SaveDataToFile();
             }
             // Beim leeren Eingabe.
             else
@@ -154,6 +157,8 @@ namespace Time_Tracking
             aktuelleZeit = null;
             aktuelleZeit = String.Format("00:00:00");
             LblTimer.Content = aktuelleZeit;
+
+            SaveDataToFile();
         }
         // Laden von Daten im ComboBox.
         private void Combo_Geladen(object sender, RoutedEventArgs e)
@@ -177,6 +182,7 @@ namespace Time_Tracking
                 else
                 {
                     Projekte.RemoveAt(index);
+                    SaveDataToFile();
                 }
             }
             else
@@ -184,5 +190,59 @@ namespace Time_Tracking
                 MessageBox.Show("Nicht gelöscht !");
             }
         }
+        // Methode zum speichern der Daten in Text-Datei
+        private void SaveDataToFile()
+        {
+            // Create a new instance of StreamWriter to write to the file
+            using (StreamWriter writer = new StreamWriter("data.txt"))
+            {
+                // Loop through the projects and write each one to the file
+                foreach (Projekt project in Projekte)
+                {
+                    writer.WriteLine($"{project.ProjektName},{project.ProjektBeschreibung},{project.AnfangsDatum},{project.EndDatum},{project.GebrauchteZeit}");
+                }
+            }
+        }
+        // Methode zum laden der Projekte aus Text-Datei (data.txt).
+        private void LoadDataFromFile()
+        {
+            // Überprüfen, ob die Datei vorhanden ist, andernfalls erstellen.
+            if (!File.Exists("data.txt"))
+            {
+                // Create a new file with default data
+                using (StreamWriter writer = new StreamWriter("data.txt"))
+                {
+                    writer.WriteLine("BeispielProjekt-Name1,BeispielProjekt-Beschreibung1,2023-04-13,2023-05-13,00:00:00");
+                    writer.WriteLine("BeispielProjekt-Name2,BeispielProjekt-Beschreibung2,2023-04-13,2023-05-13,00:00:00");
+                }
+            }
+            // Eine neue Instanz von StreamReader zum Lesen aus der Datei erstellen.
+            using (StreamReader reader = new StreamReader("data.txt"))
+            {
+
+                // Die aktuelle Liste der Projekte löschen.
+                Projekte.Clear();
+
+                // Jede Zeile der Datei durchlaufen.
+                while (!reader.EndOfStream)
+                {
+                    // Die Zeile lesen und in ein Array von Werten aufteilen.
+                    string[] values = reader.ReadLine().Split(',');
+
+                    // Ein neues Projekt erstellen und dessen Eigenschaften aus den Werten in der Datei setzen.
+                    Projekt project = new Projekt();
+                    project.ProjektName = values[0];
+                    project.ProjektBeschreibung = values[1];
+                    project.AnfangsDatum = DateTime.Parse(values[2]);
+                    project.EndDatum = DateTime.Parse(values[3]);
+                    project.GebrauchteZeit = TimeSpan.Parse(values[4]);
+
+                    // Das Projekt zur Liste hinzufügen.
+                    Projekte.Add(project);
+                }
+            }
+        }
+
+
     }
 }
