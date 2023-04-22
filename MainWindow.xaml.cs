@@ -49,6 +49,7 @@ namespace Time_Tracking
         public MainWindow()
         {
             InitializeComponent();
+            MessageBox.Show("Willkomen zu Ihrem Programm!","Hinweis" ,MessageBoxButton.OK);
             // Initialisierung von Objekt-Liste
             Projekte = new ObservableCollection<Projekt>();
 
